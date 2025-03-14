@@ -10,6 +10,8 @@ import SwiftUI
 struct NewItemView: View {
     @State var myName:String=""
     @State var myPhone:String=""
+    // 用于触发跳转的状态变量
+    @State private var navigateToDetail: Bool = false
     
     @Environment(\.modelContext) var modelContext
     
@@ -35,7 +37,8 @@ struct NewItemView: View {
                 }.padding()
             
             Button(action:{
-                
+                print(myName+" "+myPhone)
+                createNewPerson()
             }){
                 Text("新建记录")
                     .font(.title2)
@@ -44,12 +47,19 @@ struct NewItemView: View {
             .frame(width: 360,height: 50)
             .background(Color.blue)
             .cornerRadius(5)
+            // 隐藏的 NavigationLink，当 navigateToDetail 为 true 时自动触发跳转
+            NavigationLink(destination: ListItemView(), isActive: $navigateToDetail) {
+                EmptyView()
+            }
+            
         }.navigationTitle("新建记录")//其他页面点进来时会显示这个 title
     }
     
     func createNewPerson(){
         if myName != "" && myPhone != ""{
-            
+            let newperson=Item(name: myName, phone: myPhone)
+            modelContext.insert(newperson);//新建记录
+            navigateToDetail = true         // 触发导航跳转
         }
         else{
             print("名字和电话号码不能为空")

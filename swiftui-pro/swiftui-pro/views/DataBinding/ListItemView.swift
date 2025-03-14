@@ -6,10 +6,24 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ListItemView: View {
+    @Environment(\.modelContext) var modelContext;
+    @Query private var items:[Item]
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List{
+            ForEach(items){
+                person in
+                HStack{
+                    Text(person.name)
+                    Text(" - ")
+                    Text(person.phone)
+                }
+                
+            }
+        }.navigationTitle("所有用户记录")
+        
     }
 }
 
